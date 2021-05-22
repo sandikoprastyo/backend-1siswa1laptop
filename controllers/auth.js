@@ -2,11 +2,11 @@ const User = require('../models/User');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const { createJWT } = require('../utils/auth');
+require('dotenv').config();
 
 //regex for validation
-const emailRegexp = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
-
-
+const emailRegexp =
+  /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
 
 exports.signup = (req, res, next) => {
   let { name, email, password, password_confirmation } = req.body;
@@ -39,7 +39,7 @@ exports.signup = (req, res, next) => {
       if (user) {
         return res
           .status(422)
-          .json({ errors: [{ user: 'email already exists' }] });
+          .json({ errors: [{ message: 'email already exists' }] });
       } else {
         const user = new User({
           name: name,
@@ -75,29 +75,27 @@ exports.signup = (req, res, next) => {
 };
 
 exports.signin = (req, res) => {
-    let { email, password } = req.body;
-    
+  let { email, password } = req.body;
   let errors = [];
- 
-    if (!email) {
+  if (!email) {
     errors.push({ email: 'required' });
   }
-    
+
   if (!emailRegexp.test(email)) {
     errors.push({ email: 'invalid email' });
   }
-    
+
   if (!password) {
     errors.push({ passowrd: 'required' });
   }
-    
+
   if (errors.length > 0) {
     return res.status(422).json({ errors: errors });
   }
-    
+
   User.findOne({ email: email })
-    .then((users) => {
-      if (!users) {
+    .then((user) => {
+      if (!user) {
         return res.status(404).json({
           errors: [{ user: 'not found' }],
         });
@@ -110,13 +108,14 @@ exports.signin = (req, res) => {
                 .status(400)
                 .json({ errors: [{ password: 'incorrect' }] });
             }
-            let access_token = createJWT(users.email, users._id, 3600);
+
+            let access_token = createJWT(user.email, user._id, 3600);
             jwt.verify(
               access_token,
               process.env.TOKEN_SECRET,
               (err, decoded) => {
                 if (err) {
-                  res.status(500).json({ erros: err });
+                  res.status(500).json({ erros: "gagal" });
                 }
                 if (decoded) {
                   return res.status(200).json({
