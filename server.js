@@ -23,7 +23,6 @@ app.get('/', (req, res) => {
   res.json({
     message: 'Ok!',
     status: 200,
-    admin: 'http://localhost:5000/admin',
   });
 });
 
