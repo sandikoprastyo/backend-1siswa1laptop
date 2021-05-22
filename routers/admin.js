@@ -1,8 +1,8 @@
 const router = require("express").Router();
-const Admin = require("../models/admin_model.js");
+const User = require("../models/User.js");
 
 router.route("/").get((req, res) => {
-  Admin.find()
+  User.find()
     .then((users) => res.json(users))
     .catch((err) => res.status(400).json("Error: " + err));
 });
@@ -13,7 +13,7 @@ router.route("/add").post((req, res) => {
 
   newUser
     .save()
-    .then(() => res.json("Admin added in server...!"))
+    .then(() => res.json("User added in server...!"))
     .catch((err) => res.status(400).json("Error: " + err));
 });
 

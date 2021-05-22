@@ -6,7 +6,7 @@ require('dotenv').config();
 
 //import routes
 const authRoutes = require('./routers/auth');
-const { db } = require('./models/admin_model');
+const { db } = require('./models/User');
 
 
 /* server || port */

@@ -1,4 +1,4 @@
-const User = require('../models/admin_model');
+const User = require('../models/User');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const { createJWT } = require('../utils/auth');
@@ -96,8 +96,8 @@ exports.signin = (req, res) => {
   }
     
   User.findOne({ email: email })
-    .then((user) => {
-      if (!user) {
+    .then((users) => {
+      if (!users) {
         return res.status(404).json({
           errors: [{ user: 'not found' }],
         });
@@ -110,7 +110,7 @@ exports.signin = (req, res) => {
                 .status(400)
                 .json({ errors: [{ password: 'incorrect' }] });
             }
-            let access_token = createJWT(user.email, user._id, 3600);
+            let access_token = createJWT(users.email, users._id, 3600);
             jwt.verify(
               access_token,
               process.env.TOKEN_SECRET,
