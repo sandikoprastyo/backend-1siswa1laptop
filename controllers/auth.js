@@ -9,10 +9,13 @@ const emailRegexp =
   /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
 
 exports.signup = (req, res, next) => {
-  let { name, email, password, password_confirmation } = req.body;
+  let { name, role, email, password, password_confirmation } = req.body;
   let errors = [];
   if (!name) {
     errors.push({ name: 'required' });
+  }
+  if (!role) {
+    errors.push({ role: 'required' });
   }
   if (!email) {
     errors.push({ email: 'required' });
@@ -43,6 +46,7 @@ exports.signup = (req, res, next) => {
       } else {
         const user = new User({
           name: name,
+          role: role,
           email: email,
           password: password,
         });
@@ -97,6 +101,7 @@ exports.signin = (req, res) => {
     .then((user) => {
       if (!user) {
         return res.status(404).json({
+          success: false,
           errors: [{ user: 'not found' }],
         });
       } else {
@@ -106,16 +111,27 @@ exports.signin = (req, res) => {
             if (!isMatch) {
               return res
                 .status(400)
-                .json({ errors: [{ password: 'incorrect' }] });
+                .json({
+                  success: false,
+                  errors: [{ password: 'incorrect' }]
+                });
             }
 
-            let access_token = createJWT(user.email, user._id, 3600);
+            const tokens = jwt.sign({ _id: user._id }, process.env.TOKEN_SECRET,  { expiresIn: '1h' });
+            res.header('token', tokens).json({
+              success: true,
+              token: tokens,
+              message: user,
+            });
+
+
+           /*  let access_token = createJWT(user.email, user._id, 3600);
             jwt.verify(
               access_token,
               process.env.TOKEN_SECRET,
               (err, decoded) => {
                 if (err) {
-                  res.status(500).json({ erros: "gagal" });
+                  res.status(500).json({ erros: err });
                 }
                 if (decoded) {
                   return res.status(200).json({
@@ -125,7 +141,7 @@ exports.signin = (req, res) => {
                   });
                 }
               },
-            );
+            ); */
           })
           .catch((err) => {
             res.status(500).json({ erros: err });
