@@ -40,8 +40,11 @@ mongoose.connect(
 const authRoutes = require('./routers/auth');
 const adminRouter = require('./routers/admin.js');
 const penerimaRouter = require('./routers/penerima.js');
+const donaturRouter = require('./routers/donatur.js');
+
 
 app.use('/', authRoutes);
+app.use('/donatur', donaturRouter);
 app.use('/admin', adminRouter);
 app.use('/penerima', penerimaRouter);
 

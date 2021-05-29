@@ -5,7 +5,7 @@ const verifyToken = require("../routers/verifyToken");
 
 // get all admin
 router.get('/', verifyToken, (req, res) => {
-  User.find()
+  User.find({role: 'admin'})
     .then((users) => res.json({
       success: true,
       message: users,

@@ -15,29 +15,19 @@ const donaturSchema = new Schema(
       type: String,
       required: true,
     },
-    keterangan: {
+    desc: {
       type: String,
       required: true,
     },
-    barang_donasi: {
+    item_donasi: {
       type: String,
       required: true,
     },
-      category: [
-        {
-          type: Schema.Types.ObjectId,
-          ref: 'pc',
-        },
-        {
-          type: Schema.Types.ObjectId,
-          ref: 'laptop',
-        },
-        {
-          type: Schema.Types.ObjectId,
-          ref: 'accesories',
-        },
-      ],
+    category: {
+      type: String,
+      required: true,
     },
+  },
   {
     timestamps: true,
     collection: 'donaturs',
