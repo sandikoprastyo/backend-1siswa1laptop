@@ -27,6 +27,14 @@ const donaturSchema = new Schema(
       type: String,
       required: true,
     },
+    condition: {
+      type: String,
+      default: null,
+    },
+    status: {
+      type: String,
+      default: null,
+    },
   },
   {
     timestamps: true,
