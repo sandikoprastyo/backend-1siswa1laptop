@@ -15,6 +15,18 @@ router.get('/', verifyToken, (req, res) => {
     .catch((err) => res.status(400).json('Error: ' + err));
 });
 
+//! get by id donator
+router.get('/:id', verifyToken, (req, res) => {
+  Donatur.findById(req.params.id)
+    .then((donaturs) =>
+      res.json({
+        success: true,
+        message: donaturs,
+      }),
+    )
+    .catch((err) => res.status(400).json('Error: ' + err));
+});
+
 //!  delete data donator  by id
 router.delete('/:donaturId', verifyToken, async (req, res) => {
   try {
@@ -137,4 +149,26 @@ router.post('/', async (req, res) => {
   }
 });
 
+
+
+//! update data donatur
+router.post('/:id', async (req, res) => {
+  Donatur.findById(req.params.id)
+    .then((donatur) => {
+      donatur.name = req.body.name,
+      donatur.email = req.body.email,
+      donatur.phone = req.body.phone,
+      donatur.desc = req.body.desc,
+      donatur.item_donasi = req.body.item_donasi,
+      donatur.category = req.body.category,
+      donatur.condition = req.body.condition,
+      donatur.status = req.body.status,
+        
+      donatur
+        .save()
+        .then(() => res.json("Donatur updated in server..!"))
+        .catch((err) => res.status(400).json("Error: " + err));
+    })
+    .catch((err) => res.status(400).json("Error: " + err));
+});
 module.exports = router;
