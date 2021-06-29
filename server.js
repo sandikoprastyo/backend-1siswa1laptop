@@ -5,7 +5,7 @@ const bodyParser = require('body-parser');
 require('dotenv').config();
 
 //import routes
-const { db } = require('./models/User');
+//const { db } = require('./models/');
 
 /* server || port */
 const app = express();

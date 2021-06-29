@@ -1,14 +1,14 @@
 const router = require("express").Router();
-const User = require("../models/User.js");
+const Admin = require("../models/Admin.js");
 const verifyToken = require("../routers/verifyToken");
 
 
 // get all admin
 router.get('/', verifyToken, (req, res) => {
-  User.find({role: 'admin'})
-    .then((users) => res.json({
+  Admin.find().populate('donaturs')
+    .then((admin) => res.json({
       success: true,
-      message: users,
+      message: admin,
     }))
     .catch((err) => res.status(400).json("Error: " + err));
 });

@@ -1,4 +1,4 @@
-const User = require('../models/User');
+const Admin = require('../models/Admin');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const { createJWT } = require('../utils/auth');
@@ -9,13 +9,13 @@ const emailRegexp =
   /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
 
 exports.signup = (req, res, next) => {
-  let { name, role, email, password, password_confirmation } = req.body;
+  let { name, phone, email, password, password_confirmation } = req.body;
   let errors = [];
   if (!name) {
     errors.push({ name: 'required' });
   }
-  if (!role) {
-    errors.push({ role: 'required' });
+  if (!phone) {
+    errors.push({ phone: 'required' });
   }
   if (!email) {
     errors.push({ email: 'required' });
@@ -37,24 +37,24 @@ exports.signup = (req, res, next) => {
   if (errors.length > 0) {
     return res.status(422).json({ errors: errors });
   }
-  User.findOne({ email: email })
-    .then((user) => {
-      if (user) {
+  Admin.findOne({ email: email })
+    .then((admin) => {
+      if (admin) {
         return res
           .status(422)
           .json({ errors: [{ message: 'email already exists' }] });
       } else {
-        const user = new User({
+        const admin = new Admin({
           name: name,
-          role: role,
+          phone: phone,
           email: email,
           password: password,
         });
         bcrypt.genSalt(10, function (err, salt) {
           bcrypt.hash(password, salt, function (err, hash) {
             if (err) throw err;
-            user.password = hash;
-            user
+            admin.password = hash;
+            admin
               .save()
               .then((response) => {
                 res.status(200).json({
@@ -97,16 +97,16 @@ exports.signin = (req, res) => {
     return res.status(422).json({ errors: errors });
   }
 
-  User.findOne({ email: email })
-    .then((user) => {
-      if (!user) {
+  Admin.findOne({ email: email })
+    .then((Admin) => {
+      if (!Admin) {
         return res.status(404).json({
           success: false,
-          errors: [{ user: 'not found' }],
+          errors: [{ Admin: 'not found' }],
         });
       } else {
         bcrypt
-          .compare(password, user.password)
+          .compare(password, Admin.password)
           .then((isMatch) => {
             if (!isMatch) {
               return res
@@ -117,15 +117,15 @@ exports.signin = (req, res) => {
                 });
             }
 
-            const tokens = jwt.sign({ _id: user._id }, process.env.TOKEN_SECRET,  { expiresIn: '1h' });
+            const tokens = jwt.sign({ _id: Admin._id }, process.env.TOKEN_SECRET,  { expiresIn: '1h' });
             res.header('token', tokens).json({
               success: true,
               token: tokens,
-              message: user,
+              message: Admin,
             });
 
 
-           /*  let access_token = createJWT(user.email, user._id, 3600);
+           /*  let access_token = createJWT(Admin.email, Admin._id, 3600);
             jwt.verify(
               access_token,
               process.env.TOKEN_SECRET,
@@ -137,7 +137,7 @@ exports.signin = (req, res) => {
                   return res.status(200).json({
                     success: true,
                     token: access_token,
-                    message: user,
+                    message: Admin,
                   });
                 }
               },

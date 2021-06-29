@@ -1,9 +1,9 @@
 const mongoose = require('mongoose');
-const {Schema} =require('mongoose');
+const Schema = mongoose.Schema;
 
-const donaturSchema = new Schema(
+const siswaSchema = new Schema(
   {
-    name: {
+    siswa_name: {
       type: String,
       required: true,
     },
@@ -15,35 +15,40 @@ const donaturSchema = new Schema(
       type: String,
       required: true,
     },
+    alamat_rumah: {
+      type: String,
+      required: true,
+    },
     desc: {
       type: String,
       required: true,
     },
-    item_donasi: {
+    nama_sekolah: {
       type: String,
       required: true,
     },
-    category: {
+    alamat_sekolah: {
       type: String,
       required: true,
-    },
-    condition: {
-      type: String,
-      default: null,
     },
     status: {
       type: String,
-      default: null,
+      required: true,
     },
-    admin: {
-      type: Schema.Types.ObjectId,
-      ref: "Admin",
+    id_admin: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Admin'
+    },
+    id_stock: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Stock'
     },
   },
   {
     timestamps: true,
-    collection: 'donaturs',
+    collection: 'siswas'
   },
 );
 
-module.exports = mongoose.model('Donatur', donaturSchema);
+module.exports = mongoose.model('Siswa', siswaSchema);
+

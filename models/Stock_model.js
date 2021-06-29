@@ -1,33 +1,37 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const laptopSchema = new Schema(
+const stockSchema = new Schema(
   {
-    name: {
+    stock_name: {
       type: String,
       required: true,
     },
-    type: {
+    serial_number: {
       type: String,
       required: true,
     },
-    brands: {
+    category: {
       type: String,
       required: true,
     },
-    condition: {
+    status: {
       type: String,
       required: true,
     },
-    donatur: {
+    id_penerima: {
       type: Schema.Types.ObjectId,
       ref: 'Donatur',
+    },
+    id_admin: {
+      type: Schema.Types.ObjectId,
+      ref: 'Admin',
     },
   },
   {
     timestamps: true,
-    collection: 'laptop',
+    collection: 'stocks',
   },
 );
 
-module.exports = mongoose.model('Laptop', laptopSchema);
+module.exports = mongoose.model('Stock', stockSchema);
