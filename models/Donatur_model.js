@@ -35,7 +35,7 @@ const donaturSchema = new Schema(
       type: String,
       default: null,
     },
-    admin: {
+    id_admin: {
       type: Schema.Types.ObjectId,
       ref: "Admin",
     },

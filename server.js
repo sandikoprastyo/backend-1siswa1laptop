@@ -39,14 +39,17 @@ mongoose.connect(
   /* impor router */
 const authRoutes = require('./routers/auth');
 const adminRouter = require('./routers/admin.js');
-const penerimaRouter = require('./routers/penerima.js');
+const siswaRouter = require('./routers/siswa.js');
 const donaturRouter = require('./routers/donatur.js');
+const stockRouter = require('./routers/stock.js');
 
 
 app.use('/', authRoutes);
 app.use('/donatur', donaturRouter);
 app.use('/admin', adminRouter);
-app.use('/penerima', penerimaRouter);
+app.use('/siswa', siswaRouter);
+app.use('/stock', stockRouter);
+
 
 app.listen(port, () => {
   console.log(`Server is running on port : http://localhost:${port}`);

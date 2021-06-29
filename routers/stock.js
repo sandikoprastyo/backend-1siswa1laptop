@@ -5,7 +5,8 @@ const verifyToken = require('../routers/verifyToken');
 
 //! get all stock
 router.get('/', verifyToken, (req, res) => {
-    Stock.find().populate('stocks')
+  Stock.find()
+    .populate('stocks')
     .then((stock) =>
       res.json({
         success: true,
@@ -63,15 +64,16 @@ router.get('/stock/:query', verifyToken, async (req, res) => {
 
 //! post data stock
 router.post('/', async (req, res) => {
-    const dataStock = new Stock({
-        stock_name = req.body.stock_name,
-        serial_number = req.body.serial_number,
-        category = req.body.category,
-        status = req.body.status,
-      });
+  const dataStock = new Stock({
+    stock_name: req.body.stock_name,
+    serial_number: req.body.serial_number,
+    category: req.body.category,
+    status: req.body.status,
+    id_donatur: req.body.id_donatur,
+    id_admin: req.body.id_admin,
+  });
   try {
-   
-   const saveStock =  await dataStock.save();
+    const saveStock = await dataStock.save();
 
     res.json(saveStock);
   } catch (err) {
@@ -79,22 +81,19 @@ router.post('/', async (req, res) => {
   }
 });
 
-
-
 //! update data stock
 router.post('/:id', async (req, res) => {
   Donatur.findById(req.params.id)
     .then((stock) => {
-      stock.stock_name = req.body.stock_name,
-      stock.serial_number = req.body.serial_number,
-      stock.category = req.body.category,
-      stock.status = req.body.status,
-        
-      stock
-        .save()
-        .then(() => res.json("Donatur updated in server..!"))
-        .catch((err) => res.status(400).json("Error: " + err));
+      (stock.stock_name = req.body.stock_name),
+        (stock.serial_number = req.body.serial_number),
+        (stock.category = req.body.category),
+        (stock.status = req.body.status),
+        stock
+          .save()
+          .then(() => res.json('Donatur updated in server..!'))
+          .catch((err) => res.status(400).json('Error: ' + err));
     })
-    .catch((err) => res.status(400).json("Error: " + err));
+    .catch((err) => res.status(400).json('Error: ' + err));
 });
 module.exports = router;

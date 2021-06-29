@@ -19,7 +19,7 @@ const adminSchema = new Schema(
       type: String,
       required: true,
     },
-    donatur: [{
+    id_donatur: [{
       type: Schema.Types.ObjectId,
       ref: "Donatur",
     }]

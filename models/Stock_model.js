@@ -19,7 +19,7 @@ const stockSchema = new Schema(
       type: String,
       required: true,
     },
-    id_penerima: {
+    id_donatur: {
       type: Schema.Types.ObjectId,
       ref: 'Donatur',
     },

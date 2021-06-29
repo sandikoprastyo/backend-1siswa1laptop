@@ -36,11 +36,11 @@ const siswaSchema = new Schema(
       required: true,
     },
     id_admin: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: Schema.Types.ObjectId,
       ref: 'Admin'
     },
     id_stock: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: Schema.Types.ObjectId,
       ref: 'Stock'
     },
   },

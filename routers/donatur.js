@@ -140,6 +140,7 @@ router.post('/', async (req, res) => {
     category: req.body.category,
     condition: req.body.condition,
     status: req.body.status,
+    id_admin: req.body.id_admin,
   });
   try {
     const saveDonatur = await dataDonatur.save();
